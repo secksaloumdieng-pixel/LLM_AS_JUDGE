@@ -5,6 +5,8 @@ defaultTest:
   options:
     provider:
       id: openrouter:openai/gpt-4.1-mini
+      config:
+        apiKeyEnvar: OPENROUTER_API_KEY
 
 # Instructions envoyées au modèle principal
 prompts:
@@ -35,10 +37,11 @@ prompts:
 
     User: {{input}}
 
-# Modèle principal qui génère les réponses
+# Modèle principal qui produit les réponses
 providers:
   - id: openrouter:openai/gpt-4.1-mini
     config:
+      apiKeyEnvar: OPENROUTER_API_KEY
       temperature: 0
 
 tests:

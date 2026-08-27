@@ -2,20 +2,20 @@ name: Promptfoo Evaluation
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   eval:
     runs-on: ubuntu-latest
 
     env:
-      # OpenRouter key exposed under both names:
-      # - OPENROUTER_API_KEY: read by our promptfooconfig apiKey field
-      # - OPENAI_API_KEY: promptfoo's openai: provider also checks this as fallback
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      OPENAI_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+
       LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
       LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
       LANGFUSE_BASE_URL: ${{ secrets.LANGFUSE_BASE_URL }}
@@ -39,6 +39,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Verify OpenRouter API key
+        run: |
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo "ERROR: OPENROUTER_API_KEY is missing"
+            exit 1
+          fi
+          echo "OPENROUTER_API_KEY is configured"
+
       - name: Run Promptfoo evaluation
         run: |
-          npx promptfoo@latest eval -c tests/promptfooconfig.yaml
+          npx promptfoo@0.122.1 eval -c tests/promptfooconfig.yaml

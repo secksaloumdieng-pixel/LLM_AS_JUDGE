@@ -1,14 +1,12 @@
 description: Module 13 Lab 1 - LLM evaluation pipeline with 30+ test cases
 
-# Modèle utilisé pour juger les assertions llm-rubric
 defaultTest:
   options:
     provider:
       id: openrouter:openai/gpt-4.1-mini
       config:
-        apiKeyEnvar: OPENROUTER_API_KEY
+        apiKey: "{{ env.OPENROUTER_API_KEY }}"
 
-# Instructions envoyées au modèle principal
 prompts:
   - |
     You are an enterprise IT support assistant.
@@ -37,11 +35,10 @@ prompts:
 
     User: {{input}}
 
-# Modèle principal qui produit les réponses
 providers:
   - id: openrouter:openai/gpt-4.1-mini
     config:
-      apiKeyEnvar: OPENROUTER_API_KEY
+      apiKey: "{{ env.OPENROUTER_API_KEY }}"
       temperature: 0
 
 tests:
